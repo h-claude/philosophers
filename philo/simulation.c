@@ -1,30 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 14:01:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/14 14:37:41 by hclaude          ###   ########.fr       */
+/*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
+/*   Updated: 2024/08/14 16:41:11 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-int main(int argc, char **argv)
+void	philo_function(int flag)
 {
-	t_data	*data;
-	if (argc == 5 || argc == 6)
+	if (flag)
 	{
-		parse_argv(argv, data);
-		if (init_philos(data))
-			return (free(data), 1);
-		// start_simulation(data);
-		// free_data(data);
+		// do something
 	}
 	else
 	{
-		// not good !
+		// do something else
 	}
+}
+
+int start_simulation(t_data *data)
+{
+	int i;
+
+	i = 0;
+	while (i < data->nbr_philo)
+	{
+		if (data->philos->id % 2)
+			pthread_create(&data->philos[i].thread_id, NULL, philo_function, 0);
+		else
+			pthread_create(&data->philos[i].thread_id, NULL, philo_function, 1);
+		i++;
+	}
+	return (0);
 }

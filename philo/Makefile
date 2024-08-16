@@ -5,7 +5,7 @@ CFLAGS = -Wall -Werror -Wextra -pthread -g3
 AR = ar
 ARFLAGS = rcs
 
-SRCS_FILES = main.c 
+SRCS_FILES = main.c parsing.c utils.c init.c \
 
 OBJ_FILES = $(patsubst %.c, %.o, $(SRC_FILES))
 
