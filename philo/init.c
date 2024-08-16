@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:26:59 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/14 16:09:23 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/16 14:53:20 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ int	init_philos(t_data *data)
 		data->philos[i].done = false;
 		data->philos[i].data = data;
 		data->philos[i].thread_id = 0;
+		data->philos[i].firs_fork = malloc(sizeof(t_fork));
+		data->philos[i].last_fork = malloc(sizeof(t_fork));
+		if (!data->philos[i].firs_fork || !data->philos[i].last_fork)
+			return (1); // nul car faut free les mallocs avant de return 1
+		data->philos[i].firs_fork->fork_id = i;
+		data->philos[i].last_fork->fork_id = (i + 1) % data->nbr_philo;
 		i++;
 	}
 	return (0);

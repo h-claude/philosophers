@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:39 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/14 14:32:49 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/16 14:40:42 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ typedef struct	s_philo
 	pthread_t	thread_id;
 	long		meals_counter;
 	long		last_meal_time;
-	int			firs_fork;
-	int			last_fork;
+	t_fork		*firs_fork;
+	t_fork		*last_fork;
 	bool		done;
 	t_data		*data;
 }	t_philo;
@@ -51,7 +51,7 @@ typedef struct	s_data
 	long	t_teat;
 	long	t_tsleep;
 	long	nbr_eat_limit;
-	t_fork	*forks;
+	//t_fork	*forks;
 	t_philo	*philos;
 }	t_data;
 
