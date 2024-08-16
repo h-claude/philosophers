@@ -1,22 +1,20 @@
 NAME = philo
 
-CC = @cc
-CFLAGS = -Wall -Werror -Wextra -pthread -g3
-AR = ar
-ARFLAGS = rcs
+CC = cc
+CFLAGS = -Wall -Werror -Wextra -pthread
 
-SRCS_FILES = main.c parsing.c utils.c init.c \
+SRC_FILES = main.c parsing.c utils.c init.c simulation.c \
 
 OBJ_FILES = $(patsubst %.c, %.o, $(SRC_FILES))
 
 all : $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	@$(AR) $(ARFLAGS) $(NAME) $(OBJ_FILES)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ_FILES)
 	@echo "\033[32mphilo compiled\033[0m"
 
 clean:
-	@rm -rf $(OBJDIR)
+	@rm -rf $(OBJ_FILES)
 	@echo "\033[31mclean philo\033[0m"
 
 fclean: clean

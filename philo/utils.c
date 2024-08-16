@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 21:34:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/14 14:20:37 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/16 20:26:28 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
+
+int ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+int	ft_isdigit(int a)
+{
+	return ((a >= 48 && a <= 57));
+}
 
 int		ft_isnumber(char *str)
 {
@@ -28,11 +53,6 @@ int		ft_isnumber(char *str)
 		i++;
 	}
 	return (1);
-}
-
-int	ft_isdigit(int a)
-{
-	return ((a >= 48 && a <= 57));
 }
 
 int		ft_isspace(int c)

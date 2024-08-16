@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:39 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/16 14:40:42 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/16 21:49:01 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,55 @@ typedef struct	s_philo
 	pthread_t	thread_id;
 	long		meals_counter;
 	long		last_meal_time;
-	t_fork		*firs_fork;
-	t_fork		*last_fork;
 	bool		done;
+	t_fork		*r_fork;
+	t_fork		*l_fork;
 	t_data		*data;
 }	t_philo;
 
 typedef struct	s_data
 {
-	long	nbr_philo;
-	long	t_tdie;
-	long	t_teat;
-	long	t_tsleep;
-	long	nbr_eat_limit;
-	//t_fork	*forks;
-	t_philo	*philos;
+	long		philo_nbr;
+	long		t_tdie;
+	long		t_teat;
+	long		t_tsleep;
+	long		nbr_eat_limit;
+	bool		philos_die;
+	t_philo		*philos;
+	pthread_t	monitor;
 }	t_data;
 
-long	ft_atol(const char *str);
-int		ft_isnumber(char *str);
+typedef enum	e_mutex_code
+{
+	INIT,
+	DESTROY,
+	LOCK,
+	UNLOCK,
+}	t_mutex_code;
+
+typedef enum e_thread_code
+{
+	CREATE,
+	JOIN,
+	DETACH,
+}	t_thread_code;
+
+typedef enum e_philo_status
+{
+	THINK,
+	RIGHT_FORK,
+	LEFT_FORK,
+	EAT,
+	SLEEP,
+	DIE,
+}	t_philo_status;
+
+
+void	free_data(t_data *data);
 long	get_good_value(char *str);
 int		parse_argv(char **argv, t_data *data);
 int		init_philos(t_data *data);
+void	*philo_function(void *data_void);
+int		start_simulation(t_data *data);
 
 #endif
