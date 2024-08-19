@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 19:51:42 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/16 20:09:10 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/19 16:10:55 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 void	print_status_philos(t_philo *philos, t_philo_status code)
 {
 	if (code == THINK)
-		printf("%s is thinking\n", philos->id);
+		printf("%d is thinking\n", philos->id);
 	else if (code == RIGHT_FORK)
-		printf("%s has taken the right fork\n", philos->id);
+		printf("%d has taken the right fork\n", philos->id);
 	else if (code == LEFT_FORK)
-		printf("%s has taken the left fork\n", philos->id);
+		printf("%d has taken the left fork\n", philos->id);
 	else if (code == EAT)
-		printf("%s is eating\n", philos->id);
+		printf("%d is eating\n", philos->id);
 	else if (code == SLEEP)
-		printf("%s is sleeping\n", philos->id);
+		printf("%d is sleeping\n", philos->id);
 	else if (code == DIE)
-		printf("%s died\n", philos->id);
+		printf("%d died\n", philos->id);
 }
 
 void	manage_thread(t_philo *philo, t_thread_code code)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:39 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/16 21:49:01 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/19 16:07:29 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct	s_data
 	long		nbr_eat_limit;
 	bool		philos_die;
 	t_philo		*philos;
-	pthread_t	monitor;
+	t_fork		*forks;
 }	t_data;
 
 typedef enum	e_mutex_code
@@ -88,5 +88,8 @@ int		parse_argv(char **argv, t_data *data);
 int		init_philos(t_data *data);
 void	*philo_function(void *data_void);
 int		start_simulation(t_data *data);
+void	manage_thread(t_philo *philo, t_thread_code code);
+void	print_status_philos(t_philo *philos, t_philo_status code);
+void	manage_mutex(t_mtx *mutex, t_mutex_code code);
 
 #endif

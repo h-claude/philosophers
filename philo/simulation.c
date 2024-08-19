@@ -3,65 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/16 22:00:40 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/19 16:29:24 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
+void	kill_threads_and_mutex(t_data *data)
+{
+	int i;
+
+	i = 0;
+	while (i < data->philo_nbr)
+	{
+		printf("pthread_join %d\n", data->philos[i].id);
+		pthread_join(data->philos[i].thread_id, NULL);
+		i++;
+	}
+}
+
 void	*philo_function(void *philo_void)
 {
 	t_philo	*philo;
-	
+	int		i;
+
+	i = 0;
 	philo = (t_philo *)philo_void;
-	while (philo->data->philos_die == false)
+	while (philo->meals_counter < philo->data->nbr_eat_limit)
 	{
 		if (philo->id % 2 != 0)
 		{
-			printf("IMPAIR :\n%d pense\n", philo->id);
-			pthread_mutex_lock(&philo->r_fork->fork);
-			printf("%d a pris la fourchette droite\n", philo->id);
-			pthread_mutex_lock(&philo->l_fork->fork);
-			printf("%d a pris la fourchette gauche\n", philo->id);
-			printf("%d mange\n", philo->id);
-			pthread_mutex_unlock(&philo->r_fork->fork);
-			pthread_mutex_unlock(&philo->l_fork->fork);
-			printf("%d dort\n", philo->id);
+			usleep(250000);
+			//sleep(5);
+			print_status_philos(philo, THINK);
+			manage_mutex(&philo->r_fork->fork, LOCK);
+			print_status_philos(philo, RIGHT_FORK);
+			manage_mutex(&philo->l_fork->fork, LOCK);
+			print_status_philos(philo, LEFT_FORK);
+			print_status_philos(philo, EAT);
+			manage_mutex(&philo->r_fork->fork, UNLOCK);
+			manage_mutex(&philo->l_fork->fork, UNLOCK);
+			print_status_philos(philo, SLEEP);
 		}
 		else
 		{
-			printf("PAIR :\n%d pense\n", philo->id);
-			pthread_mutex_lock(&philo->r_fork->fork);
-			printf("%d a pris la fourchette droite\n", philo->id);
-			pthread_mutex_lock(&philo->l_fork->fork);
-			printf("%d a pris la fourchette gauche\n", philo->id);
-			printf("%d mange\n", philo->id);
-			pthread_mutex_unlock(&philo->r_fork->fork);
-			pthread_mutex_unlock(&philo->l_fork->fork);
-			printf("%d dort\n", philo->id);
+			print_status_philos(philo, THINK);
+			manage_mutex(&philo->r_fork->fork, LOCK);
+			print_status_philos(philo, RIGHT_FORK);
+			manage_mutex(&philo->l_fork->fork, LOCK);
+			print_status_philos(philo, LEFT_FORK);
+			print_status_philos(philo, EAT);
+			manage_mutex(&philo->r_fork->fork, UNLOCK);
+			manage_mutex(&philo->l_fork->fork, UNLOCK);
+			print_status_philos(philo, SLEEP);
 		}
-	}
-	return (NULL);
-}
-
-void	*monitor_thread(void *data_void)
-{
-	int i;
-	t_data *data;
-
-	i = 0;
-	data = (t_data *)data_void;
-	while (i < data->philo_nbr)
-	{
-		if (data->philos[i].done)
-		{
-			data->philos_die = true;
-			return (NULL);
-		}
-		i++;
+		philo->meals_counter++;
 	}
 	return (NULL);
 }
@@ -76,7 +75,6 @@ int start_simulation(t_data *data)
 		pthread_create(&data->philos[i].thread_id, NULL, philo_function, (void *)&data->philos[i]);
 		i++;
 	}
-	pthread_create(&data->monitor, NULL, monitor_thread, (void *)data->philos);
-	pthread_detach(data->monitor);
+	kill_threads_and_mutex(data);
 	return (0);
 }
