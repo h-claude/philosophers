@@ -3,7 +3,7 @@ NAME = philo
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -pthread
 
-SRC_FILES = main.c parsing.c utils.c init.c simulation.c manage_utils.c \
+SRC_FILES = main.c parsing.c utils.c init.c simulation.c manage_utils.c utils_parsing.c\
 
 OBJ_FILES = $(patsubst %.c, %.o, $(SRC_FILES))
 

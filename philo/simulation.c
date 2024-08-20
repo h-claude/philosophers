@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/19 16:29:24 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/20 13:07:15 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	kill_threads_and_mutex(t_data *data)
 	i = 0;
 	while (i < data->philo_nbr)
 	{
-		printf("pthread_join %d\n", data->philos[i].id);
+		//printf("pthread_join %d\n", data->philos[i].id);
 		pthread_join(data->philos[i].thread_id, NULL);
 		i++;
 	}
@@ -32,33 +32,36 @@ void	*philo_function(void *philo_void)
 
 	i = 0;
 	philo = (t_philo *)philo_void;
-	while (philo->meals_counter < philo->data->nbr_eat_limit)
+	//if (philo->id % 2 != 0)
+	//	usleep(25000);
+	while (philo->meals_counter < philo->data->nbr_eat_limit || philo->data->nbr_eat_limit == -1)
 	{
 		if (philo->id % 2 != 0)
 		{
-			usleep(250000);
-			//sleep(5);
-			print_status_philos(philo, THINK);
-			manage_mutex(&philo->r_fork->fork, LOCK);
-			print_status_philos(philo, RIGHT_FORK);
-			manage_mutex(&philo->l_fork->fork, LOCK);
-			print_status_philos(philo, LEFT_FORK);
+			manage_mutex(philo->r_fork->fork, LOCK, philo);
+			print_status_philos(philo, FORK);
+			manage_mutex(philo->l_fork->fork, LOCK, philo);
+			print_status_philos(philo, FORK);
 			print_status_philos(philo, EAT);
-			manage_mutex(&philo->r_fork->fork, UNLOCK);
-			manage_mutex(&philo->l_fork->fork, UNLOCK);
+			manage_mutex(philo->r_fork->fork, UNLOCK, philo);
+			manage_mutex(philo->l_fork->fork, UNLOCK, philo);
 			print_status_philos(philo, SLEEP);
+			print_status_philos(philo, THINK);
 		}
 		else
 		{
-			print_status_philos(philo, THINK);
-			manage_mutex(&philo->r_fork->fork, LOCK);
-			print_status_philos(philo, RIGHT_FORK);
-			manage_mutex(&philo->l_fork->fork, LOCK);
-			print_status_philos(philo, LEFT_FORK);
+			manage_mutex(philo->r_fork->fork, LOCK, philo);
+			print_status_philos(philo, FORK);
+			manage_mutex(philo->l_fork->fork, LOCK, philo);
+			print_status_philos(philo, FORK);
+			philo->last_meal_time = get_time_fs(philo);
+			if (philo->last_meal_time == -1)
+				return (philo->data->philos_die = true, NULL);
 			print_status_philos(philo, EAT);
-			manage_mutex(&philo->r_fork->fork, UNLOCK);
-			manage_mutex(&philo->l_fork->fork, UNLOCK);
+			manage_mutex(philo->r_fork->fork, UNLOCK, philo);
+			manage_mutex(philo->l_fork->fork, UNLOCK, philo);
 			print_status_philos(philo, SLEEP);
+			print_status_philos(philo, THINK);
 		}
 		philo->meals_counter++;
 	}

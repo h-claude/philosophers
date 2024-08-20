@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:26:59 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/18 11:41:36 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/20 13:18:18 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ int	init_forks(t_data *data)
 
 	i = 0;
 	data->forks = malloc(sizeof(t_fork) * data->philo_nbr);
+	if (!data->forks)
+		return (1);
 	while (i < data->philo_nbr)
 	{
 		data->forks[i].fork_id = i;
-		if (pthread_mutex_init(&data->forks[i++].fork, NULL))
-			return (1);
+		//if (pthread_mutex_init(&data->forks[i++].fork, NULL))
+		//	return (1);
 	}
 	return (0);
 }
@@ -49,8 +51,13 @@ int	init_philos(t_data *data)
 	i = 0;
 	data->philos = malloc(sizeof(t_philo) * data->philo_nbr);
 	if (!data->philos)
-		return (1);
+		return (1); // creer fonction qui free et destrot les mutex
 	init_forks(data);
+	if (data->philo_nbr == 1)
+	{
+		printf("0 0 is dead\n");
+		return (1);
+	}
 	while (i < data->philo_nbr)
 	{
 		data->philos[i].id = i;
@@ -61,10 +68,8 @@ int	init_philos(t_data *data)
 		data->philos[i].done = false;
 		data->philos[i].data = data;
 		data->philos[i].r_fork = &data->forks[i];
+		pthread_mutex_init(data->philos[i].r_fork->fork, NULL);
 		data->philos[i].l_fork = &data->forks[(i + 1) % data->philo_nbr];
-		if (!data->philos[i].r_fork)
-			return (1); // nul car faut free les mallocs avant de return 1
-		data->philos[i].r_fork->fork_id = i;
 		i++;
 	}
 	return (0);

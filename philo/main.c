@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:01:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/18 11:45:06 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/20 12:31:54 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ int main(int argc, char **argv)
 		return (1);
 	if (argc == 5 || argc == 6)
 	{
-		parse_argv(argv, data);
+		if (parse_argv(argv, data))
+			return (free(data), 1);
+		//printf("philo_nbr = %li\nt_tdie = %li\nt_teat = %li\nt_tsleep = %li\nnbr_eat_limit = %li\nstart_simulation = %ld\n",
+		//	data->philo_nbr, data->t_tdie, data->t_teat, data->t_tsleep, data->nbr_eat_limit, data->start_time);
 		if (init_philos(data))
 			return (free(data), 1);
-		//printf("philo_nbr = %li\nt_tdie = %li\nt_teat = %li\nt_tsleep = %li\nnbr_eat_limit = %li\n",
-			//data->philo_nbr, data->t_tdie, data->t_teat, data->t_tsleep, data->nbr_eat_limit);
 		start_simulation(data);
 		// free_data(data);
 	}

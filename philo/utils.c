@@ -3,109 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/13 21:34:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/16 20:26:28 by hclaude          ###   ########.fr       */
+/*   Created: 2024/08/20 10:34:52 by hclaude           #+#    #+#             */
+/*   Updated: 2024/08/20 11:58:40 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-int ft_strcmp(const char *s1, const char *s2)
+void	ft_usleep(long time, t_philo *philo)
 {
-	while (*s1 && *s1 == *s2)
+	long	start_time;
+
+	if (philo->data->philos_die)
+		exit(1);
+	start_time = get_time_fs(philo);
+	if (start_time == -1)
+		return (perror("gettimeofday"), exit(1));
+	if (time > philo->data->t_tdie + 5000)
 	{
-		s1++;
-		s2++;
+		philo->data->philos_die = true;
+		printf("%ld %d is dead\n", start_time, philo->id);
+		exit(1);
 	}
-	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+	else
+		usleep(time);
 }
 
-size_t	ft_strlen(const char *str)
+long	get_current_time(void)
 {
-	size_t	i;
+	struct timeval	time;
 
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
+	if (gettimeofday(&time, NULL))
+		return (perror("gettimeofday"), -1);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-int	ft_isdigit(int a)
+long	get_time_fs(t_philo *philo)
 {
-	return ((a >= 48 && a <= 57));
-}
+	long	time;
+	long	current_time;
 
-int		ft_isnumber(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] == ' ')
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int		ft_isspace(int c)
-{
-	c = (unsigned char)c;
-	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r'
-		|| c == ' ')
-		return (1);
-	return (0);
-}
-
-long	ft_atol(const char *str)
-{
-	long int	nb;
-	int			sign;
-
-	nb = 0;
-	sign = 1;
-	while (ft_isspace((int)*str))
-		str++;
-	if (*str == '+' || *str == '-')
-	{
-		if (*str == '-')
-			sign = (-1);
-		str++;
-	}
-	while (ft_isdigit((int)*str))
-	{
-		nb = nb * 10 + *str - '0';
-		str++;
-	}
-	return (sign * nb);
-}
-
-int	is_int_max(char *str)
-{
-	if (!ft_isnumber(str))
-		return (1);
-	if (ft_strlen(str) > 10)
-		return (1);
-	if (ft_strlen(str) == 10 && ft_strcmp(str, "2147483647") > 0)
-		return (1);
-	return (0);
-}
-
-long	get_good_value(char *str)
-{
-	long	nb;
-
-	if (is_int_max(str))
-		return (-1);
-	nb = ft_atol(str);
-	if (nb < 0)
-		return (-1);
-	return (nb);
+	current_time = get_current_time();
+	if (current_time == -1)
+		return (perror("gettimeofday"), -1);
+	time = current_time - philo->data->start_time;
+	return (time);
 }
