@@ -6,22 +6,57 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/20 13:07:15 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:51:53 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-void	kill_threads_and_mutex(t_data *data)
+void	join_threads(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->philo_nbr)
 	{
-		//printf("pthread_join %d\n", data->philos[i].id);
-		pthread_join(data->philos[i].thread_id, NULL);
-		i++;
+		pthread_join(data->philos[i++].thread_id, NULL);
+	}
+}
+
+void	philo_function_odd(t_philo *philo)
+{
+	while (philo->meals_counter < philo->data->nbr_eat_limit
+		|| philo->data->nbr_eat_limit == -1)
+	{
+		manage_mutex(philo->r_fork, LOCK, philo);
+		print_fork(philo);
+		manage_mutex(philo->l_fork, LOCK, philo);
+		print_fork(philo);
+		print_eat(philo);
+		manage_mutex(philo->r_fork, UNLOCK, philo);
+		manage_mutex(philo->l_fork, UNLOCK, philo);
+		print_sleep(philo);
+		print_think(philo);
+		philo->meals_counter++;
+	}
+}
+
+void	philo_function_even(t_philo *philo)
+{
+	while (philo->meals_counter < philo->data->nbr_eat_limit
+		|| philo->data->nbr_eat_limit == -1)
+	{
+		manage_mutex(philo->l_fork, LOCK, philo);
+		print_fork(philo);
+		manage_mutex(philo->r_fork, LOCK, philo);
+		print_fork(philo);
+		print_eat(philo);
+		manage_mutex(philo->r_fork, UNLOCK, philo);
+		manage_mutex(philo->l_fork, UNLOCK, philo);
+		print_sleep(philo);
+		print_think(philo);
+		usleep(2500);
+		philo->meals_counter++;
 	}
 }
 
@@ -32,52 +67,43 @@ void	*philo_function(void *philo_void)
 
 	i = 0;
 	philo = (t_philo *)philo_void;
-	//if (philo->id % 2 != 0)
-	//	usleep(25000);
-	while (philo->meals_counter < philo->data->nbr_eat_limit || philo->data->nbr_eat_limit == -1)
+	if (pthread_mutex_lock(&philo->data->print_mutex))
+		error_exit(philo->data);
+	if (pthread_mutex_unlock(&philo->data->print_mutex))
+		error_exit(philo->data);
+	if (philo->data->philos_die)
+		exit(1);
+	if (philo->id % 2 != 0)
 	{
-		if (philo->id % 2 != 0)
-		{
-			manage_mutex(philo->r_fork->fork, LOCK, philo);
-			print_status_philos(philo, FORK);
-			manage_mutex(philo->l_fork->fork, LOCK, philo);
-			print_status_philos(philo, FORK);
-			print_status_philos(philo, EAT);
-			manage_mutex(philo->r_fork->fork, UNLOCK, philo);
-			manage_mutex(philo->l_fork->fork, UNLOCK, philo);
-			print_status_philos(philo, SLEEP);
-			print_status_philos(philo, THINK);
-		}
-		else
-		{
-			manage_mutex(philo->r_fork->fork, LOCK, philo);
-			print_status_philos(philo, FORK);
-			manage_mutex(philo->l_fork->fork, LOCK, philo);
-			print_status_philos(philo, FORK);
-			philo->last_meal_time = get_time_fs(philo);
-			if (philo->last_meal_time == -1)
-				return (philo->data->philos_die = true, NULL);
-			print_status_philos(philo, EAT);
-			manage_mutex(philo->r_fork->fork, UNLOCK, philo);
-			manage_mutex(philo->l_fork->fork, UNLOCK, philo);
-			print_status_philos(philo, SLEEP);
-			print_status_philos(philo, THINK);
-		}
-		philo->meals_counter++;
+		usleep(philo->data->t_teat / 2);
+		philo_function_odd(philo);
 	}
+	else
+		philo_function_even(philo);
 	return (NULL);
 }
 
-int start_simulation(t_data *data)
+int	start_simulation(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
+	pthread_mutex_lock(&data->print_mutex);
 	while (i < data->philo_nbr)
 	{
-		pthread_create(&data->philos[i].thread_id, NULL, philo_function, (void *)&data->philos[i]);
+		if (pthread_create(&data->philos[i].thread_id,
+				NULL, philo_function, (void *)&data->philos[i]))
+		{
+			data->philos_die = true;
+			printf("Error: pthread_create\n");
+		}
 		i++;
 	}
-	kill_threads_and_mutex(data);
+	if (pthread_mutex_unlock(&data->print_mutex))
+	{
+		data->philos_die = true;
+		printf("Error: pthread_mutex_unlock\n");
+	}
+	join_threads(data);
 	return (0);
 }
