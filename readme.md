@@ -11,3 +11,6 @@ fonction : pthread_mutex_lock prend la structure mutex et empeche tous les autre
 
 Note : Ne pas en abuser car il n'y aura plus d'interet a faire du multi thread
 pour check longueur si plus de 10 chiffres ca degage et sinon faire un strncmp de intmax vs le nombre donne et si il renvoie un chiffre positif c'est que nombre donne est superieur au int max donc ca degage.
+
+
+LEAKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
