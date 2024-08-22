@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:46:48 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/20 16:13:44 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 10:28:41 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ int	parse_argv(char **argv, t_data *data)
 		return (1);
 	data->t_tsleep = get_good_value(argv[4]) * 1000;
 	if (data->t_tsleep < 0)
-		return (1);
-	data->start_time = get_current_time();
-	if (data->start_time < 0)
 		return (1);
 	data->philos_die = false;
 	if (argv[5])

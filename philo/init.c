@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:26:59 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/21 17:53:35 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 10:32:19 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	if_philo_alone(t_data *data)
 		printf("%-10d %-7d has taken a fork\n", 0, 1);
 		usleep(data->t_tdie);
 		printf("\033[91m%-10ld %-7d died\n\033[0m", data->t_tdie / 1000, 1);
-		return (1);
+		return (2);
 	}
 	return (0);
 }
@@ -76,12 +76,12 @@ int	init_philos_and_forks(t_data *data)
 	if (init_forks(data))
 		return (free(data->philos), 1);
 	if (if_philo_alone(data))
-		return (free(data->philos), 1);
+		return (free(data->philos), free(data->forks), 2);
 	init_philos(data);
 	if (pthread_mutex_init(&data->die_mutex, NULL))
-		return (free(data->philos), 1);
+		return (free(data->philos), free(data->forks), 1);
 	if (pthread_mutex_init(&data->print_mutex, NULL))
-		return (free(data->philos), \
+		return (free(data->philos), free(data->forks), \
 			pthread_mutex_destroy(&data->die_mutex), 1);
 	return (0);
 }
