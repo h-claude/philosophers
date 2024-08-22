@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 19:51:42 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/21 17:52:07 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 12:37:25 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ void	is_dead(t_philo *philo)
 	current_time = get_time_fs(philo);
 	current_time = current_time - philo->last_meal_time;
 	pthread_mutex_lock(&philo->data->die_mutex);
-	if (current_time > philo->data->t_tdie / 1000 || philo->data->philos_die)
+	if (current_time >= philo->data->t_tdie / 1000 || philo->data->philos_die)
 	{
-		usleep(philo->data->t_tdie);
 		if (philo->data->philos_die)
 		{
 			pthread_mutex_unlock(&philo->data->die_mutex);

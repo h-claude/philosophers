@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:34:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/21 17:58:10 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 12:52:00 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ void	error_exit(t_data *data)
 
 void	ft_usleep(long time, t_philo *philo)
 {
-	long	start_time;
-
-	start_time = get_time_fs(philo);
-	if (start_time == -1)
-		return (perror("gettimeofday"), exit(1));
 	pthread_mutex_lock(&philo->data->die_mutex);
 	if (philo->data->philos_die)
 	{
