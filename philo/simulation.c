@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 17:34:59 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 17:39:52 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ void	*philo_function(void *philo_void)
 	i = 0;
 	philo = (t_philo *)philo_void;
 	if (pthread_mutex_lock(&philo->data->print_mutex))
-		error_exit(philo->data);
+		error_exit(philo);
 	if (pthread_mutex_unlock(&philo->data->print_mutex))
-		error_exit(philo->data);
+		error_exit(philo);
 	pthread_mutex_lock(&philo->data->die_mutex);
 	if (philo->data->philos_die)
 	{

@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:39 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 17:12:00 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 17:40:17 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		is_dead(t_philo *philo);
 long	get_current_time(void);
 long	get_time_fs(t_philo *philo);
 int		ft_usleep(long time, t_philo *philo);
-int		error_exit(t_data *data);
+int		error_exit(t_philo *philo);
 int		exit_thread_free(t_philo *philo);
 
 // print functions

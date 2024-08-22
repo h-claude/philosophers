@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:34:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 17:34:14 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 17:39:13 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,16 @@ int	exit_thread_free(t_philo *philo)
 	return (1);
 }
 
-int	error_exit(t_data *data)
+int	error_exit(t_philo *philo)
 {
+	pthread_mutex_unlock(&philo->data->die_mutex);
+	pthread_mutex_unlock(&philo->data->print_mutex);
+	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
 	printf("Error\n");
-	data->philos_die = true;
+	pthread_mutex_lock(&philo->data->die_mutex);
+	philo->data->philos_die = true;
+	pthread_mutex_unlock(&philo->data->die_mutex);
 	return (1);
 }
 
