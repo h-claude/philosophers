@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:34:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 12:52:00 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 12:59:40 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,17 @@ void	ft_usleep(long time, t_philo *philo)
 		exit(1);
 	}
 	pthread_mutex_unlock(&philo->data->die_mutex);
+	if (time > philo->data->t_tdie)
+	{
+		usleep(philo->data->t_tdie - philo->last_meal_time * 1000);
+		pthread_mutex_lock(&philo->data->die_mutex);
+		if (philo->data->philos_die)
+			exit(1);
+		philo->data->philos_die = true;
+		print_die(philo);
+		pthread_mutex_unlock(&philo->data->die_mutex);
+		exit(1);
+	}
 	usleep(time);
 }
 
