@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 19:51:42 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 17:19:00 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 18:08:21 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,20 @@ int	is_dead(t_philo *philo)
 int	manage_mutex(t_mtx *mutex, t_mutex_code code, t_philo *philo)
 {
 	if (pthread_mutex_lock(&philo->data->die_mutex))
-		return (error_exit(philo->data));
+		return (error_exit(philo));
 	if (philo->data->philos_die)
 		return (exit_thread_free(philo));
 	if (pthread_mutex_unlock(&philo->data->die_mutex))
-		return (error_exit(philo->data));
+		return (error_exit(philo));
 	if (code == LOCK)
 	{
 		if (pthread_mutex_lock(mutex))
-			return (error_exit(philo->data));
+			return (error_exit(philo));
 	}
 	else
 	{
 		if (pthread_mutex_unlock(mutex))
-			return (error_exit(philo->data));
+			return (error_exit(philo));
 	}
 	return (0);
 }
