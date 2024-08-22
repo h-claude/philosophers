@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:39 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/21 17:57:09 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 17:12:00 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,21 +87,21 @@ int		parse_argv(char **argv, t_data *data);
 int		init_philos_and_forks(t_data *data);
 void	*philo_function(void *data_void);
 int		start_simulation(t_data *data);
-void	manage_thread(t_philo *philo, t_thread_code code);
-void	manage_mutex(t_mtx *mutex, t_mutex_code code, t_philo *philo);
-void	is_dead(t_philo *philo);
+int		manage_mutex(t_mtx *mutex, t_mutex_code code, t_philo *philo);
+int		is_dead(t_philo *philo);
 long	get_current_time(void);
 long	get_time_fs(t_philo *philo);
-void	ft_usleep(long time, t_philo *philo);
-void	error_exit(t_data *data);
+int		ft_usleep(long time, t_philo *philo);
+int		error_exit(t_data *data);
+int		exit_thread_free(t_philo *philo);
 
 // print functions
-void	print_think(t_philo *philos);
-void	print_fork(t_philo *philos);
-void	print_eat(t_philo *philos);
-void	print_sleep(t_philo *philos);
-void	print_die(t_philo *philos);
-void	ft_putnbr(int n);
+int		print_think(t_philo *philos);
+int		print_fork(t_philo *philos);
+int		print_eat(t_philo *philos);
+int		print_sleep(t_philo *philos);
+int		print_die(t_philo *philos);
+int		ft_putnbr(int n);
 
 // utils functions for utils_parsing
 int		ft_isspace(int c);

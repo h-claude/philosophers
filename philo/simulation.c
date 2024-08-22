@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 10:41:44 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 17:34:59 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,61 @@ void	join_threads(t_data *data)
 	free(data->forks);
 }
 
-void	philo_function_odd(t_philo *philo)
+void	*philo_function_odd(t_philo *philo)
 {
-	while (philo->meals_counter < philo->data->nbr_eat_limit
-		|| philo->data->nbr_eat_limit == -1)
+	while (philo->meals_counter < \
+		philo->data->nbr_eat_limit || philo->data->nbr_eat_limit == -1)
 	{
-		manage_mutex(philo->r_fork, LOCK, philo);
-		print_fork(philo);
-		manage_mutex(philo->l_fork, LOCK, philo);
-		print_fork(philo);
-		print_eat(philo);
-		manage_mutex(philo->r_fork, UNLOCK, philo);
-		manage_mutex(philo->l_fork, UNLOCK, philo);
-		print_sleep(philo);
-		print_think(philo);
+		if (manage_mutex(philo->r_fork, LOCK, philo))
+			return (NULL);
+		if (print_fork(philo))
+			return (NULL);
+		if (manage_mutex(philo->l_fork, LOCK, philo))
+			return (NULL);
+		if (print_fork(philo))
+			return (NULL);
+		if (print_eat(philo))
+			return (NULL);
+		if (manage_mutex(philo->r_fork, UNLOCK, philo))
+			return (NULL);
+		if (manage_mutex(philo->l_fork, UNLOCK, philo))
+			return (NULL);
+		if (print_sleep(philo))
+			return (NULL);
+		if (print_think(philo))
+			return (NULL);
 		philo->meals_counter++;
 	}
+	return (NULL);
 }
 
-void	philo_function_even(t_philo *philo)
+void	*philo_function_even(t_philo *philo)
 {
-	while (philo->meals_counter < philo->data->nbr_eat_limit
-		|| philo->data->nbr_eat_limit == -1)
+	while (philo->meals_counter < \
+		philo->data->nbr_eat_limit || philo->data->nbr_eat_limit == -1)
 	{
-		manage_mutex(philo->l_fork, LOCK, philo);
-		print_fork(philo);
-		manage_mutex(philo->r_fork, LOCK, philo);
-		print_fork(philo);
-		print_eat(philo);
-		manage_mutex(philo->r_fork, UNLOCK, philo);
-		manage_mutex(philo->l_fork, UNLOCK, philo);
-		print_sleep(philo);
-		print_think(philo);
+		if (manage_mutex(philo->l_fork, LOCK, philo))
+			return (NULL);
+		if (print_fork(philo))
+			return (NULL);
+		if (manage_mutex(philo->r_fork, LOCK, philo))
+			return (NULL);
+		if (print_fork(philo))
+			return (NULL);
+		if (print_eat(philo))
+			return (NULL);
+		if (manage_mutex(philo->r_fork, UNLOCK, philo))
+			return (NULL);
+		if (manage_mutex(philo->l_fork, UNLOCK, philo))
+			return (NULL);
+		if (print_sleep(philo))
+			return (NULL);
+		if (print_think(philo))
+			return (NULL);
 		usleep(2500);
 		philo->meals_counter++;
 	}
+	return (NULL);
 }
 
 void	*philo_function(void *philo_void)
@@ -84,16 +104,16 @@ void	*philo_function(void *philo_void)
 	if (philo->data->philos_die)
 	{
 		pthread_mutex_unlock(&philo->data->die_mutex);
-		exit(1);
+		return (NULL);
 	}
 	pthread_mutex_unlock(&philo->data->die_mutex);
 	if (philo->id % 2 != 0)
 	{
 		usleep(philo->data->t_teat / 2);
-		philo_function_odd(philo);
+		return (philo_function_odd(philo));
 	}
 	else
-		philo_function_even(philo);
+		return (philo_function_even(philo));
 	return (NULL);
 }
 

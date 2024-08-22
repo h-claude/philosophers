@@ -6,13 +6,13 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 19:51:42 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 12:37:25 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/22 17:19:00 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-void	is_dead(t_philo *philo)
+int	is_dead(t_philo *philo)
 {
 	long	current_time;
 
@@ -24,42 +24,33 @@ void	is_dead(t_philo *philo)
 		if (philo->data->philos_die)
 		{
 			pthread_mutex_unlock(&philo->data->die_mutex);
-			exit(1);
+			return (exit_thread_free(philo));
 		}
 		philo->data->philos_die = true;
 		print_die(philo);
-		pthread_mutex_unlock(&philo->data->die_mutex);
-		exit(1);
+		return (exit_thread_free(philo));
 	}
 	pthread_mutex_unlock(&philo->data->die_mutex);
+	return (0);
 }
 
-void	manage_thread(t_philo *philo, t_thread_code code)
-{
-	if (code == CREATE)
-		pthread_create(&philo->thread_id, NULL, philo_function, philo);
-	else if (code == JOIN)
-		pthread_join(philo->thread_id, NULL);
-	else if (code == DETACH)
-		pthread_detach(philo->thread_id);
-}
-
-void	manage_mutex(t_mtx *mutex, t_mutex_code code, t_philo *philo)
+int	manage_mutex(t_mtx *mutex, t_mutex_code code, t_philo *philo)
 {
 	if (pthread_mutex_lock(&philo->data->die_mutex))
-		error_exit(philo->data);
+		return (error_exit(philo->data));
 	if (philo->data->philos_die)
-		exit(1);
+		return (exit_thread_free(philo));
 	if (pthread_mutex_unlock(&philo->data->die_mutex))
-		error_exit(philo->data);
+		return (error_exit(philo->data));
 	if (code == LOCK)
 	{
 		if (pthread_mutex_lock(mutex))
-			error_exit(philo->data);
+			return (error_exit(philo->data));
 	}
 	else
 	{
 		if (pthread_mutex_unlock(mutex))
-			error_exit(philo->data);
+			return (error_exit(philo->data));
 	}
+	return (0);
 }

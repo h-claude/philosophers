@@ -1,7 +1,7 @@
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -pthread
+CFLAGS = -Wall -Werror -Wextra -pthread -g3
 
 SRC_FILES = main.c parsing.c utils.c init.c simulation.c manage_utils.c utils_parsing.c print.c\
 utils_for_utils_parsing.c \
