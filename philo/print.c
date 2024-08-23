@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 11:29:43 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 18:29:24 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/23 13:49:13 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	print_sleep(t_philo *philos)
 
 int	print_die(t_philo *philos)
 {
-	printf("\033[91m%-10ld %-7d died\n\033[0m", get_time_fs(philos), philos->id);
+	printf("\033[91m%-10ld %-7d died\n\033[0m", \
+		get_time_fs(philos), philos->id);
 	return (1);
 }

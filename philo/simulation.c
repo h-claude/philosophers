@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 17:39:52 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/23 13:49:25 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ int	start_simulation(t_data *data)
 		{
 			data->philos_die = true;
 			printf("Error: pthread_create\n");
+			return (pthread_mutex_unlock(&data->print_mutex), \
+				join_threads(data), 1);
 		}
 		i++;
 	}
