@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/23 13:49:25 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/25 11:38:50 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	*philo_function_even(t_philo *philo)
 			return (NULL);
 		if (print_think(philo))
 			return (NULL);
-		usleep(2500);
+		usleep(2000);
 		philo->meals_counter++;
 	}
 	return (NULL);
@@ -92,9 +92,7 @@ void	*philo_function_even(t_philo *philo)
 void	*philo_function(void *philo_void)
 {
 	t_philo	*philo;
-	int		i;
 
-	i = 0;
 	philo = (t_philo *)philo_void;
 	if (pthread_mutex_lock(&philo->data->print_mutex))
 		error_exit(philo);
@@ -109,7 +107,8 @@ void	*philo_function(void *philo_void)
 	pthread_mutex_unlock(&philo->data->die_mutex);
 	if (philo->id % 2 != 0)
 	{
-		usleep(philo->data->t_teat / 2);
+		if (philo->data->t_teat < philo->data->t_tdie)
+			usleep(philo->data->t_teat / 2);
 		return (philo_function_odd(philo));
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:26:59 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 10:32:19 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/25 10:28:28 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,6 @@ void	init_philos(t_data *data)
 
 int	init_philos_and_forks(t_data *data)
 {
-	int	i;
-
-	i = 0;
 	data->philos = malloc(sizeof(t_philo) * data->philo_nbr);
 	if (!data->philos)
 		return (1);

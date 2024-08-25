@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 19:51:42 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 18:25:30 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/25 11:31:54 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@ int	is_dead(t_philo *philo)
 {
 	long	current_time;
 
-	current_time = get_time_fs(philo);
-	current_time = current_time - philo->last_meal_time;
+	current_time = get_time_fs(philo) - philo->last_meal_time;
 	pthread_mutex_lock(&philo->data->die_mutex);
-	if (current_time >= philo->data->t_tdie / 1000 || philo->data->philos_die)
+	if (current_time > philo->data->t_tdie / 1000 || philo->data->philos_die)
 	{
 		if (philo->data->philos_die)
 		{
