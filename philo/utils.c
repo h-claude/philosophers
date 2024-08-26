@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:34:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 17:39:13 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/26 14:06:54 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,19 @@ int	error_exit(t_philo *philo)
 
 int	ft_usleep(long time, t_philo *philo)
 {
+	long	time_since_last_meal;
+	long	sleep_time;
+
 	pthread_mutex_lock(&philo->data->die_mutex);
 	if (philo->data->philos_die)
 		return (exit_thread_free(philo));
 	pthread_mutex_unlock(&philo->data->die_mutex);
-	if (time > philo->data->t_tdie)
+	time_since_last_meal = (get_time_fs(philo) - philo->last_meal_time) * 1000;
+	if (time > philo->data->t_tdie || time_since_last_meal + time > philo->data->t_tdie)
 	{
-		usleep(philo->data->t_tdie - philo->last_meal_time * 1000);
+		sleep_time = philo->data->t_tdie - time_since_last_meal;
+		if (sleep_time > 0)
+			usleep(sleep_time);
 		pthread_mutex_lock(&philo->data->die_mutex);
 		if (philo->data->philos_die)
 			return (exit_thread_free(philo));
