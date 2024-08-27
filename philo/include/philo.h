@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:34:39 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/22 17:40:17 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 14:11:48 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_fork
 {
 	t_mtx	fork;
 	long	fork_id;
+	bool	taken;
 }	t_fork;
 
 typedef struct s_philo
@@ -37,9 +38,8 @@ typedef struct s_philo
 	pthread_t	thread_id;
 	long		meals_counter;
 	long		last_meal_time;
-	bool		done;
-	t_mtx		*r_fork;
-	t_mtx		*l_fork;
+	t_fork		*r_fork;
+	t_fork		*l_fork;
 	t_data		*data;
 }	t_philo;
 
@@ -87,13 +87,14 @@ int		parse_argv(char **argv, t_data *data);
 int		init_philos_and_forks(t_data *data);
 void	*philo_function(void *data_void);
 int		start_simulation(t_data *data);
-int		manage_mutex(t_mtx *mutex, t_mutex_code code, t_philo *philo);
+int		manage_mutex(t_fork *fork, t_mutex_code code, t_philo *philo);
 int		is_dead(t_philo *philo);
 long	get_current_time(void);
 long	get_time_fs(t_philo *philo);
 int		ft_usleep(long time, t_philo *philo);
 int		error_exit(t_philo *philo);
 int		exit_thread_free(t_philo *philo);
+int		smart_sleep(t_philo *philo);
 
 // print functions
 int		print_think(t_philo *philos);

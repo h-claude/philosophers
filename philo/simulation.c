@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:38:10 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/25 11:38:50 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 13:55:39 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	join_threads(t_data *data)
 	i = 0;
 	while (i < data->philo_nbr)
 	{
-		pthread_mutex_destroy(data->philos[i++].r_fork);
+		pthread_mutex_destroy(&data->philos[i++].r_fork->fork);
 	}
 	pthread_mutex_destroy(&data->die_mutex);
 	pthread_mutex_destroy(&data->print_mutex);
@@ -81,9 +81,9 @@ void	*philo_function_even(t_philo *philo)
 			return (NULL);
 		if (print_sleep(philo))
 			return (NULL);
+		usleep(1500);
 		if (print_think(philo))
 			return (NULL);
-		usleep(2000);
 		philo->meals_counter++;
 	}
 	return (NULL);

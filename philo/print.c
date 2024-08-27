@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 11:29:43 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/26 13:35:21 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 13:42:26 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ int	print_think(t_philo *philos)
 	printf("%-10ld %-7d is thinking\n", get_time_fs(philos), philos->id);
 	if (pthread_mutex_unlock(&philos->data->print_mutex))
 		return (error_exit(philos));
+	if (smart_sleep(philos))
+		return (1);
 	return (0);
 }
 
 int	print_fork(t_philo *philos)
 {
 	if (is_dead(philos))
-		return (1);
+		return (exit_thread_free(philos));
 	if (pthread_mutex_lock(&philos->data->print_mutex))
 		return (error_exit(philos));
 	printf("%-10ld %-7d has taken a fork\n", get_time_fs(philos), philos->id);
@@ -39,7 +41,7 @@ int	print_fork(t_philo *philos)
 int	print_eat(t_philo *philos)
 {
 	if (is_dead(philos))
-		return (1);
+		return (exit_thread_free(philos));
 	if (pthread_mutex_lock(&philos->data->print_mutex))
 		return (error_exit(philos));
 	printf("%-10ld %-7d is eating\n", get_time_fs(philos), philos->id);

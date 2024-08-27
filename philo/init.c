@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hclaude <hclaude@student.42mulhouse.fr>    +#+  +:+       +#+        */
+/*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 14:26:59 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/25 10:28:28 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 13:30:14 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,9 @@ void	init_philos(t_data *data)
 		data->philos[i].thread_id = 0;
 		data->philos[i].meals_counter = 0;
 		data->philos[i].last_meal_time = 0;
-		data->philos[i].done = false;
 		data->philos[i].data = data;
-		data->philos[i].r_fork = &data->forks[i].fork;
-		data->philos[i].l_fork = &data->forks[(i + 1) % data->philo_nbr].fork;
+		data->philos[i].r_fork = &data->forks[i];
+		data->philos[i].l_fork = &data->forks[(i + 1) % data->philo_nbr];
 		i++;
 	}
 }

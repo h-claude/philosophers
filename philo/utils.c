@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:34:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/26 14:06:54 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 13:50:05 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,13 @@ int	exit_thread_free(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->data->die_mutex);
 	pthread_mutex_unlock(&philo->data->print_mutex);
-	pthread_mutex_unlock(philo->r_fork);
-	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(&philo->r_fork->fork);
+	pthread_mutex_unlock(&philo->l_fork->fork);
+	philo->l_fork->taken = false;
+	philo->r_fork->taken = false;
+	pthread_mutex_lock(&philo->data->die_mutex);
+	philo->data->philos_die = true;
+	pthread_mutex_unlock(&philo->data->die_mutex);
 	return (1);
 }
 
@@ -25,8 +30,10 @@ int	error_exit(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->data->die_mutex);
 	pthread_mutex_unlock(&philo->data->print_mutex);
-	pthread_mutex_unlock(philo->r_fork);
-	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(&philo->r_fork->fork);
+	pthread_mutex_unlock(&philo->l_fork->fork);
+	philo->l_fork->taken = false;
+	philo->r_fork->taken = false;
 	printf("Error\n");
 	pthread_mutex_lock(&philo->data->die_mutex);
 	philo->data->philos_die = true;
@@ -44,7 +51,8 @@ int	ft_usleep(long time, t_philo *philo)
 		return (exit_thread_free(philo));
 	pthread_mutex_unlock(&philo->data->die_mutex);
 	time_since_last_meal = (get_time_fs(philo) - philo->last_meal_time) * 1000;
-	if (time > philo->data->t_tdie || time_since_last_meal + time > philo->data->t_tdie)
+	if (time > philo->data->t_tdie || \
+		time_since_last_meal + time > philo->data->t_tdie)
 	{
 		sleep_time = philo->data->t_tdie - time_since_last_meal;
 		if (sleep_time > 0)
@@ -74,7 +82,7 @@ long	get_current_time(void)
 /*
 ** Return the time since the start of the simulation in milliseconds
 */
-long	get_time_fs(t_philo *philo)
+inline long	get_time_fs(t_philo *philo)
 {
 	long			current_time;
 	struct timeval	time;
