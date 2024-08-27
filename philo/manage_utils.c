@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 19:51:42 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/27 13:51:34 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 17:59:00 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int	manage_mutex(t_fork *fork, t_mutex_code code, t_philo *philo)
 	}
 	else
 	{
+		fork->taken = false;
 		if (pthread_mutex_unlock(&fork->fork))
 			return (error_exit(philo));
-		fork->taken = false;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 11:29:43 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/27 13:42:26 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 17:58:11 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	print_think(t_philo *philos)
 {
-	if (is_dead(philos))
-		return (1);
 	if (pthread_mutex_lock(&philos->data->print_mutex))
 		return (error_exit(philos));
+	if (is_dead(philos))
+		return (1);
 	printf("%-10ld %-7d is thinking\n", get_time_fs(philos), philos->id);
 	if (pthread_mutex_unlock(&philos->data->print_mutex))
 		return (error_exit(philos));
@@ -28,10 +28,10 @@ int	print_think(t_philo *philos)
 
 int	print_fork(t_philo *philos)
 {
-	if (is_dead(philos))
-		return (exit_thread_free(philos));
 	if (pthread_mutex_lock(&philos->data->print_mutex))
 		return (error_exit(philos));
+	if (is_dead(philos))
+		return (exit_thread_free(philos));
 	printf("%-10ld %-7d has taken a fork\n", get_time_fs(philos), philos->id);
 	if (pthread_mutex_unlock(&philos->data->print_mutex))
 		return (error_exit(philos));
@@ -40,10 +40,10 @@ int	print_fork(t_philo *philos)
 
 int	print_eat(t_philo *philos)
 {
-	if (is_dead(philos))
-		return (exit_thread_free(philos));
 	if (pthread_mutex_lock(&philos->data->print_mutex))
 		return (error_exit(philos));
+	if (is_dead(philos))
+		return (exit_thread_free(philos));
 	printf("%-10ld %-7d is eating\n", get_time_fs(philos), philos->id);
 	if (pthread_mutex_unlock(&philos->data->print_mutex))
 		return (error_exit(philos));
@@ -55,10 +55,10 @@ int	print_eat(t_philo *philos)
 
 int	print_sleep(t_philo *philos)
 {
-	if (is_dead(philos))
-		return (1);
 	if (pthread_mutex_lock(&philos->data->print_mutex))
 		return (error_exit(philos));
+	if (is_dead(philos))
+		return (1);
 	printf("%-10ld %-7d is sleeping\n", get_time_fs(philos), philos->id);
 	if (pthread_mutex_unlock(&philos->data->print_mutex))
 		return (error_exit(philos));
@@ -69,9 +69,7 @@ int	print_sleep(t_philo *philos)
 
 int	print_die(t_philo *philos)
 {
-	pthread_mutex_lock(&philos->data->print_mutex);
 	printf("\033[91m%-10ld %-7d died\n\033[0m", \
 		get_time_fs(philos), philos->id);
-	pthread_mutex_unlock(&philos->data->print_mutex);
 	return (1);
 }

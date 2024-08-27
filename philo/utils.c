@@ -6,7 +6,7 @@
 /*   By: hclaude <hclaude@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 10:34:52 by hclaude           #+#    #+#             */
-/*   Updated: 2024/08/27 13:50:05 by hclaude          ###   ########.fr       */
+/*   Updated: 2024/08/27 17:58:31 by hclaude          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int	exit_thread_free(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->data->die_mutex);
 	pthread_mutex_unlock(&philo->data->print_mutex);
-	pthread_mutex_unlock(&philo->r_fork->fork);
-	pthread_mutex_unlock(&philo->l_fork->fork);
 	philo->l_fork->taken = false;
 	philo->r_fork->taken = false;
+	pthread_mutex_unlock(&philo->r_fork->fork);
+	pthread_mutex_unlock(&philo->l_fork->fork);
 	pthread_mutex_lock(&philo->data->die_mutex);
 	philo->data->philos_die = true;
 	pthread_mutex_unlock(&philo->data->die_mutex);
@@ -30,10 +30,10 @@ int	error_exit(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->data->die_mutex);
 	pthread_mutex_unlock(&philo->data->print_mutex);
-	pthread_mutex_unlock(&philo->r_fork->fork);
-	pthread_mutex_unlock(&philo->l_fork->fork);
 	philo->l_fork->taken = false;
 	philo->r_fork->taken = false;
+	pthread_mutex_unlock(&philo->r_fork->fork);
+	pthread_mutex_unlock(&philo->l_fork->fork);
 	printf("Error\n");
 	pthread_mutex_lock(&philo->data->die_mutex);
 	philo->data->philos_die = true;
